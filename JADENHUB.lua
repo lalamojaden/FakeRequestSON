@@ -7,76 +7,125 @@ local TweenService = game:GetService("TweenService")
 
 local LocalPlayer = Players.LocalPlayer
 
+-- Remove previous GUI if it exists
 if CoreGui:FindFirstChild("JADENHUB_UI") then
     CoreGui.JADENHUB_UI:Destroy()
 end
 
+-- Create Main ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "JADENHUB_UI"
 ScreenGui.ResetOnSpawn = false
 pcall(function() ScreenGui.Parent = CoreGui end)
 if not ScreenGui.Parent then ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
 
--- Main UI
+-- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 280, 0, 180)
-MainFrame.Position = UDim2.new(0.5, -140, 0.5, -90)
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+MainFrame.Size = UDim2.new(0, 450, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -225, 0.5, -150)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 MainFrame.BorderSizePixel = 0
-MainFrame.Visible = true 
 MainFrame.Active = true
 MainFrame.Draggable = true
 MainFrame.Parent = ScreenGui
 
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 8)
-UICorner.Parent = MainFrame
+-- UICorner for Main Frame
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 8)
+MainCorner.Parent = MainFrame
 
-local TopBar = Instance.new("Frame")
-TopBar.Size = UDim2.new(1, 0, 0, 36)
-TopBar.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
-TopBar.BorderSizePixel = 0
-TopBar.Parent = MainFrame
+-- Top Bar / Header
+local Header = Instance.new("Frame")
+Header.Name = "Header"
+Header.Size = UDim2.new(1, 0, 0, 40)
+Header.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+Header.BorderSizePixel = 0
+Header.Parent = MainFrame
 
-local TopCorner = Instance.new("UICorner")
-TopCorner.CornerRadius = UDim.new(0, 8)
-TopCorner.Parent = TopBar
-
-local TopBarFix = Instance.new("Frame")
-TopBarFix.Size = UDim2.new(1, 0, 0, 8)
-TopBarFix.Position = UDim2.new(0, 0, 1, -8)
-TopBarFix.BackgroundColor3 = Color3.fromRGB(35, 35, 42)
-TopBarFix.BorderSizePixel = 0
-TopBarFix.Parent = TopBar
+local HeaderCorner = Instance.new("UICorner")
+HeaderCorner.CornerRadius = UDim.new(0, 8)
+HeaderCorner.Parent = Header
 
 local TitleLabel = Instance.new("TextLabel")
-TitleLabel.Size = UDim2.new(1, -40, 1, 0)
-TitleLabel.Position = UDim2.new(0, 12, 0, 0)
+TitleLabel.Size = UDim2.new(1, -50, 1, 0)
+TitleLabel.Position = UDim2.new(0, 15, 0, 0)
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "JADENHUB"
+TitleLabel.Text = "JADENHUB - Notification & Chat System"
 TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-TitleLabel.TextSize = 14
+TitleLabel.TextSize = 16
+TitleLabel.Font = Enum.Font.GothamBold
 TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
-TitleLabel.Parent = TopBar
+TitleLabel.Parent = Header
 
+-- Close Button
 local CloseButton = Instance.new("TextButton")
-CloseButton.Size = UDim2.new(0, 26, 0, 26)
-CloseButton.Position = UDim2.new(1, -30, 0.5, -13)
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -35, 0, 5)
 CloseButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-CloseButton.Font = Enum.Font.GothamBold
 CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseButton.TextSize = 12
-CloseButton.Parent = TopBar
+CloseButton.TextSize = 14
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Parent = Header
 
 local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(0, 5)
+CloseCorner.CornerRadius = UDim.new(0, 6)
 CloseCorner.Parent = CloseButton
 
 CloseButton.MouseButton1Click:Connect(function()
-    MainFrame.Visible = false
+    ScreenGui:Destroy()
+end)
+
+-- Content Area / Buttons Container
+local ContentFrame = Instance.new("ScrollingFrame")
+ContentFrame.Size = UDim2.new(1, -20, 1, -60)
+ContentFrame.Position = UDim2.new(0, 10, 0, 50)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.BorderSizePixel = 0
+ContentFrame.CanvasSize = UDim2.new(0, 0, 0, 250)
+ContentFrame.Parent = MainFrame
+
+-- Notification Function
+local function SendNotification(title, text)
+    StarterGui:SetCore("SendNotification", {
+        Title = title;
+        Text = text;
+        Duration = 5;
+    })
+end
+
+-- Button 1: Send Friend Request Notification Feature
+local FriendBtn = Instance.new("TextButton")
+FriendBtn.Size = UDim2.new(1, 0, 0, 45)
+FriendBtn.Position = UDim2.new(0, 0, 0, 10)
+FriendBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 60)
+FriendBtn.Text = "Trigger Friend Request Popup"
+FriendBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+FriendBtn.TextSize = 14
+FriendBtn.Font = Enum.Font.GothamMedium
+FriendBtn.Parent = ContentFrame
+
+local FriendCorner = Instance.new("UICorner")
+FriendCorner.CornerRadius = UDim.new(0, 6)
+FriendCorner.Parent = FriendBtn
+
+FriendBtn.MouseButton1Click:Connect(function()
+    SendNotification("JADENHUB", "Simulated Friend Request Sent Successfully!")
+end)
+
+-- Status Indicator
+local StatusLabel = Instance.new("TextLabel")
+StatusLabel.Size = UDim2.new(1, 0, 0, 30)
+StatusLabel.Position = UDim2.new(0, 0, 0, 70)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Text = "Status: Hub Active & Protected"
+StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 128)
+StatusLabel.TextSize = 13
+StatusLabel.Font = Enum.Font.Gotham
+StatusLabel.Parent = ContentFrame
+
+SendNotification("JADENHUB Loaded", "Welcome, " .. LocalPlayer.Name .. "!")
 end)
 
 local UsernameBox = Instance.new("TextBox")
